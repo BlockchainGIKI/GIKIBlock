@@ -1,0 +1,21 @@
+Sr No.,Date,Time,Network,Contract Name,Metric,Function,Value,Fee,Transactions
+1,11/22/2023,12:48:02 GMT+0500 (Pakistan Standard Time),Sepolia,Benchmark,Latency,getUser,0.7437000000029802,0,0
+2,11/22/2023,13:22:02 GMT+0500 (Pakistan Standard Time),Polygon-Mumbai,Benchmark,Latency,getUser,0.7762999999970198,0,0
+3,11/22/2023,13:25:41 GMT+0500 (Pakistan Standard Time),Polygon-Mumbai,Benchmark,Latency,getUser,0.6850999999940396,0,0
+4,11/22/2023,13:28:00 GMT+0500 (Pakistan Standard Time),Polygon-Mumbai,Storage,Latency,retrieve,0.9849000000059605,0,0
+5,11/22/2023,13:32:11 GMT+0500 (Pakistan Standard Time),Polygon-Mumbai,Benchmark,Latency,getUser,1.1455,0,0
+6,11/22/2023,13:39:45 GMT+0500 (Pakistan Standard Time),Polygon-Mumbai,Benchmark,Throughput,getUser,8.80049282750602,0,10
+7,11/22/2023,15:47:41 GMT+0500 (Pakistan Standard Time),Polygon-Mumbai,Benchmark,Latency,getUser,2.0342999999970197,0,0
+8,11/22/2023,15:47:41 GMT+0500 (Pakistan Standard Time),Polygon-Mumbai,Benchmark,Latency,getUser,0.03759999999403953,0,0
+9,11/22/2023,15:47:41 GMT+0500 (Pakistan Standard Time),Polygon-Mumbai,Benchmark,Latency,getUser,0.02869999998807907,0,0
+10,11/22/2023,15:47:41 GMT+0500 (Pakistan Standard Time),Polygon-Mumbai,Benchmark,Latency,getUser,0.006900000005960465,0,0
+11,11/22/2023,15:47:41 GMT+0500 (Pakistan Standard Time),Polygon-Mumbai,Benchmark,Latency,getUser,0.013700000002980233,0,0
+12,11/22/2023,15:47:41 GMT+0500 (Pakistan Standard Time),Polygon-Mumbai,Benchmark,Latency,getUser,0.008299999997019768,0,0
+13,11/22/2023,15:54:11 GMT+0500 (Pakistan Standard Time),Polygon-Mumbai,Benchmark,Latency,getUser,2.6940999999940396,0,0
+14,11/22/2023,15:54:11 GMT+0500 (Pakistan Standard Time),Polygon-Mumbai,Benchmark,Latency,getUser,0.004400000005960464,0,0
+15,11/22/2023,15:54:11 GMT+0500 (Pakistan Standard Time),Polygon-Mumbai,Benchmark,Latency,getUser,0.004800000011920929,0,0
+16,11/22/2023,15:54:11 GMT+0500 (Pakistan Standard Time),Polygon-Mumbai,Benchmark,Latency,getUser,0.007200000002980232,0,0
+17,11/22/2023,15:54:11 GMT+0500 (Pakistan Standard Time),Polygon-Mumbai,Benchmark,Latency,getUser,0.009900000005960464,0,0
+18,11/22/2023,15:54:11 GMT+0500 (Pakistan Standard Time),Polygon-Mumbai,Benchmark,Latency,getUser,0.005299999997019768,0,0
+19,11/23/2023,16:49:37 GMT+0500 (Pakistan Standard Time),Polygon-Mumbai,Bond,Latency,getPrice,0.9972000000001863,0,0
+20,11/23/2023,16:53:25 GMT+0500 (Pakistan Standard Time),Polygon-Mumbai,Bond,Latency,getPrice,1.0093999999999068,0,0
