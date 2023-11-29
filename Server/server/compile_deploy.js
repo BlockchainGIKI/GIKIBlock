@@ -2,9 +2,10 @@ const fs = require("fs").promises;
 const solc = require("solc");
 const { Web3 } = require('web3');
 const { config } = require('../constants');
+require('dotenv').config();
 
 // const address = '0x5719D02a5ebe5cA3AE722c703c24Ae5C845d0538';
-const privateKey = '0xd25190a68016a74d836189a3ef41b32b405efa9ec0271f429f99dc84e5a7d18d';
+const privateKey = process.env.PRIVATE_KEY;
 const filePath = '/home/user/Documents/Kachra/React/Lesson 1/user_contracts.csv'
 
 async function readFromContractCSV(filePath) {
