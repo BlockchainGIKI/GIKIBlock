@@ -1,0 +1,50 @@
+.custom-button {
+    margin: auto;
+    min-width: 165px;
+    width: auto;
+    height: 50px;
+    letter-spacing: 0.5px;
+    line-height: 50px;
+    padding-left: 1px;
+    padding: 0 35px 0 35px;
+    font-size: 15px;
+    background-color: black;
+    color: white;
+    text-transform: uppercase;
+    font-family: 'Open Sans Condensed';
+    font-weight: bolder;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+}
+
+.custom-button:hover {
+    background-color: white;
+    color: black;
+    border: 1px solid MediumSeaGreen;
+}
+
+.toLeft {
+    padding-left: 8px;
+}
+
+.card {
+    border-radius: 10px;
+    border-radius: 12px;
+    background-color: #6c707054;
+    padding: 20px;
+    width: calc(40% - 190px);
+    transition: 0.3s ease;
+    margin: auto;
+    margin-top: 20px;
+}
+
+.card:hover {
+    transform: scale(1.02);
+}
+
+.image {
+    width: 200px;
+    height: 200px;
+}

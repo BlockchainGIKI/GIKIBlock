@@ -1,0 +1,46 @@
+.card-main {
+    border-radius: 10px;
+    background-color: #6c707054;
+    padding: 20px;
+    width: calc(45% - 10px);
+    transition: 0.3s ease;
+    margin: auto;
+    margin-top: 20px;
+}
+
+.card-main:hover {
+    transform: scale(1.02);
+}
+
+.col-25 {
+    float: left;
+    width: 25%;
+    margin-top: 15px;
+}
+
+.col-75 {
+    float: left;
+    width: 75%;
+    margin-top: 6px;
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+input {
+    width: 95%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+}
+
+@media screen and (max-width: 600px) {
+    .col-25, .col-75 {
+      width: 100%;
+      margin-top: 0;
+    }
+}

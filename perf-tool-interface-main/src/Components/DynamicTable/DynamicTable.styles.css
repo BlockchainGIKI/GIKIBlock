@@ -1,0 +1,20 @@
+table, th, td {
+    border: 1px solid;
+    border-collapse: collapse;
+    padding: 5px;
+}
+
+.card-Dynamic {
+    border-radius: 10px;
+    background-color: #6c707054;
+    padding: 20px;
+    width: calc(50% - 15px);
+    transition: 0.3s ease;
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.card-Dynamic:hover {
+    transform: scale(1.02);
+}
