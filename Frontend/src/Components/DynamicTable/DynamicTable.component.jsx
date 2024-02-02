@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectAccount } from "../../accountSlice";
 import { selectChange } from "../../changeSlice";
 import { setChange } from "../../changeSlice";
+import ServerIP from '../../ServerIP';
 
 const DynamicTable = () => {
     // get table column
@@ -22,11 +23,10 @@ const DynamicTable = () => {
         const fetchData = async () => {
             try {
                 const params = { account: account };
-                const response = await axios.get('http://10.1.33.124:8000/get-latency-data', { params });
-                // console.log("Crank Gameplayes: ", response.data);
-                // Assuming your response.data is an array of column names
+                const response = await axios.get('http://' + ServerIP + ':8000/get-latency-data', { params });
+                console.log("Crank Gameplayes: ", response.data);
                 setColumn(response.data);
-                console.log('Chnage: ', change);
+                console.log('Change: ', change, ServerIP);
                 dispatch(setChange(false));
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -70,7 +70,7 @@ const DynamicTable = () => {
     async function downloadFile() {
         try {
             const params = { account: account };
-            const response = await axios.get('http://10.1.33.124:8000/send-user-metric-csv', {
+            const response = await axios.get('http://' + ServerIP + ':8000/send-user-metric-csv', {
                 params,
                 responseType: 'blob',
             });
@@ -92,7 +92,7 @@ const DynamicTable = () => {
 
     return (
         <div className="card-Dynamic">
-            <h4> Performance metric table </h4>
+            <h4> Performance Metric Table for {account ? account : '0x5719D02a5ebe5cA3AE722c703c24Ae5C845d0538'} </h4>
             <table>
                 <thead>
                     <tr>{ThData()}</tr>

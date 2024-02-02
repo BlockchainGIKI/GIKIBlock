@@ -1,0 +1,13 @@
+.Navbar {
+    display: flex;
+    /* justify-content: space-between; */
+    align-items: center;
+    background-color: #7c5c18;
+    padding: 10px;
+    width: 98.75%;
+    /* color: #fff; */
+}
+
+.navItem {
+    margin-right: 15px;
+}

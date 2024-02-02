@@ -196,3 +196,7 @@ Sr No.,Date,Time,Blockchain,Function,Number of Transactions,Throughput,Transacti
 198,11/22/2023,09:47:48 GMT+0500 (Pakistan Standard Time),Polygon-Mumbai,getUser,10,4.421945671342281,0,
 199,11/22/2023,13:39:21 GMT+0500 (Pakistan Standard Time),Polygon-Mumbai,getUser,,0,0,
 200,11/22/2023,13:39:44 GMT+0500 (Pakistan Standard Time),Polygon-Mumbai,getUser,10,8.80049282750602,0,
+201,1/18/2024,17:08:50 GMT+0500 (Pakistan Standard Time),Celo,issueMoney,10,0.5552863783550501,0.00194768,
+202,1/30/2024,17:13:20 GMT+0500 (Pakistan Standard Time),Polygon-Mumbai,issueMoney,10,0.3770823311618582,0.00194768,
+203,1/30/2024,17:21:34 GMT+0500 (Pakistan Standard Time),Polygon-Mumbai,issueMoney,10,0.3170353926992047,0.00194768,
+204,1/30/2024,18:00:17 GMT+0500 (Pakistan Standard Time),Polygon-Mumbai,issueMoney,10,0.8728409599130503,0.00194768,

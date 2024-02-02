@@ -9,7 +9,7 @@ import { Provider } from 'react-redux';
 import './App.css';
 // import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Navbar from './Components/Navigation/Navbar';
+import Navbar from './Components/Navigation/Navbar.component';
 import Goats from './Components/Instructions/Instructions';
 
 
@@ -18,13 +18,12 @@ function App() {
     <Provider store={store}>
       <div className="App">
         <Header></Header>
-        <Router>
+        {/* <Router>
           <Navbar />
           <Routes>
-            <Route path='/' element={<MainDashboard />} />
             <Route path='/instructions' element={<Goats />} />
           </Routes>
-        </Router>
+        </Router> */}
         <MainDashboard></MainDashboard>
         <CustomButton>Connect wallet (Metamask)</CustomButton>
         <TextArea></TextArea>

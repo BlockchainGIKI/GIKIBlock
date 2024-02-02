@@ -5,7 +5,7 @@ const { config } = require('../constants');
 
 // const address = '0x5719D02a5ebe5cA3AE722c703c24Ae5C845d0538';
 const privateKey = '0xd25190a68016a74d836189a3ef41b32b405efa9ec0271f429f99dc84e5a7d18d';
-const filePath = '/home/user/Documents/Kachra/React/Lesson 1/user_contracts.csv'
+const filePath = '../user_contracts.csv'
 
 async function readFromContractCSV(filePath) {
     try {
@@ -60,7 +60,7 @@ async function writeToContractCSV(name, network, deployer, address) {
 
 async function writeToUserMetricsCSV(address, date, time, network, contract, metric, ftn, value, fee, tx) {
     address = address.toLowerCase();
-    const userFilePath = `/home/user/Documents/Kachra/React/Lesson 1/server/user_metrics/${address}.csv`;
+    const userFilePath = `./user_metrics/${address}.csv`;
     try {
         await fs.access(userFilePath, fs.constants.F_OK);
         console.log(`File at path '${userFilePath}' exists.`);
@@ -80,7 +80,7 @@ async function writeToUserMetricsCSV(address, date, time, network, contract, met
             const data = [1, date, time, network, contract, metric, ftn, value, fee, tx];
             const csvHeaderData = [headers, data].map(row => row.join(','));
             const csvString = csvHeaderData.join('\n');
-            await fs.writeFile(userFilePath, csvString, 'utf8');
+            await fs.writeFile(userFilePath, csvString + '\n', 'utf8');
             console.log('CSV data has been written to', userFilePath);
         } else {
             console.error('Error:', err);
@@ -94,7 +94,7 @@ function compile(sourceCode, contractName) {
         const input = {
             language: "Solidity",
             sources: { main: { content: sourceCode } },
-            settings: { outputSelection: { "*": { "*": ["abi", "evm.bytecode"] } } },
+            settings: { outputSelection: { "*": { "*": ["abi", "evm.bytecode"] } }, evmVersion: "paris" },
         };
         // Parse the compiler output to retrieve the ABI and Bytecode
         const output = solc.compile(JSON.stringify(input));

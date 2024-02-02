@@ -7,6 +7,7 @@ import './Text-Area.styles.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAccount } from "../../accountSlice";
 import { setChange } from "../../changeSlice";
+import ServerIP from '../../ServerIP';
 
 function TextArea() {
     const dispatch = useDispatch();
@@ -34,7 +35,7 @@ function TextArea() {
     // Getting and setting selected function of the deployed contract
     const [selectedFunction, setSelectedFunction] = useState('');
     // Getting and setting input parameters of selected function of the deployed contract
-    const [functionInputValues, setfunctionInputValues] = useState([]);
+    const [functionInputValues, setfunctionInputValues] = useState({});
     // Getting and setting the performance metric for analysis of the deployed contract
     const [selectedMetric, setSelectedMetric] = useState('');
     // Getting and setting the input batch transactions for throughput analysis of the deployed contract
@@ -115,10 +116,14 @@ function TextArea() {
         setfunctionInputValues([]); // Reset input values when the function changes
     };
 
-    const handlefunctionInputChange = (event, index) => {
-        const newInputValues = [...inputValues];
-        newInputValues[index] = event.target.value;
-        setfunctionInputValues(newInputValues);
+    const handlefunctionInputChange = (event, type, name) => {
+        // const newInputValues = [...inputValues];
+        // newInputValues[index] = event.target.value;
+        // setfunctionInputValues(newInputValues);
+        setfunctionInputValues((prevValues) => ({
+            ...prevValues,
+            [`${type}_${name}`]: event.target.value,
+        }));
     };
 
     const handleMetricChange = (event) => {
@@ -156,7 +161,7 @@ function TextArea() {
                 console.log("At text area");
                 console.log(contractName);
                 console.log(selectedBlockchain);
-                const response = await axios.get('http://10.1.33.124:8000/compile-and-deploy', { params });
+                const response = await axios.get('http://' + ServerIP + ':8000/compile-and-deploy', { params });
                 console.log(response.data);
                 if (response.data.result.abi) {
                     window.alert('Compiled successfully');
@@ -222,15 +227,15 @@ function TextArea() {
                     status: false,
                     url: '',
                 }
-                const params = {
-                    network: 'Polygon-Mumbai',
+                let params = {
+                    network: selectedBlockchain,
                     API: api,
                     ABI: ABI,
                     ByteCode: ByteCode,
                     inputValues: inputValues
                 };
                 console.log('params: ', params);
-                const response = await axios.get('http://10.1.33.124:8000/deploy-contract', { params });
+                let response = await axios.get('http://' + ServerIP + ':8000/deploy-contract', { params });
                 console.log(response.data);
                 if (response.data.result.address) {
                     window.alert(response.data.result.deployed)
@@ -256,6 +261,13 @@ function TextArea() {
                 else {
                     window.alert(`Error deploying contract: ${response.data.result.message}`);
                 }
+                params = {
+                    name: contractName,
+                    network: selectedBlockchain,
+                    deployer: account,
+                    address: ContractAddress
+                };
+                response = await axios.get('http://' + ServerIP + ':8000/write-to-contract-csv', { params });
             } catch (error) {
                 console.error('Error fetching data:', error);
                 // console.log('Metamask', account);
@@ -265,6 +277,8 @@ function TextArea() {
             try {
                 // Use Web3.js to create a contract instance
                 const contract = new web3.eth.Contract(ABI);
+                const gas = await contract.deploy({ data: ByteCode, arguments: inputValues }).estimateGas();
+                const gasPrice = await web3.eth.getGasPrice();
                 // Deploy the contract
                 const deployedContract = await contract
                     .deploy({
@@ -273,7 +287,8 @@ function TextArea() {
                     })
                     .send({
                         from: account,
-                        gas: '5000000',
+                        gas: gas,
+                        gasPrice: gasPrice
                     });
                 console.log('Contract deployed at:', deployedContract.options.address);
                 setContractAddress(deployedContract.options.address);
@@ -283,7 +298,7 @@ function TextArea() {
                     deployer: account,
                     address: deployedContract.options.address
                 };
-                const response = await axios.get('http://10.1.33.124:8000/write-to-contract-csv', { params });
+                const response = await axios.get('http://' + ServerIP + ':8000/write-to-contract-csv', { params });
                 console.log(response.data);
                 const ftns = ABI
                     .filter(item => item.type === 'function')
@@ -323,17 +338,17 @@ function TextArea() {
                     url: '',
                 }
                 const params = {
-                    network: 'Polygon-Mumbai',
+                    network: selectedBlockchain,
                     API: api,
                     ABI: JSON.stringify(ABI) || ABItext,
                     address: ContractAddress,
                     metric: selectedMetric,
                     ftn: selectedFunction,
-                    ftnInputs: functionInputValues,
+                    ftnInputs: Object.values(functionInputValues),
                     type: type,
                     transactions: selectedBatch
                 };
-                const response = await axios.get('http://10.1.33.124:8000/measure-function-call-metrics', { params });
+                const response = await axios.get('http://' + ServerIP + ':8000/measure-function-call-metrics', { params });
                 console.log(response.data);
                 if (response.data.result.perf) {
                     window.alert('Measured successfully');
@@ -348,11 +363,11 @@ function TextArea() {
                         ftn: selectedFunction,
                         value: response.data.result.perf,
                         fee: response.data.result.fee,
-                        tx: selectedMetric === 'Latency' ? 0 : selectedBatch
+                        tx: selectedMetric === 'Latency' ? 1 : selectedBatch
                     }
                     console.log(params);
                     try {
-                        const resp = await axios.get('http://10.1.33.124:8000/write-to-user-metric-csv', { params });
+                        const resp = await axios.get('http://' + ServerIP + ':8000/write-to-user-metric-csv', { params });
                         console.log(resp.data);
                         dispatch(setChange(true));
                     }
@@ -383,7 +398,7 @@ function TextArea() {
                     if (ftn[0].stateMutability === 'pure' || ftn[0].stateMutability === 'view') {
                         try {
                             const startTime = performance.now();
-                            const response = await contract.methods[selectedFunction](...functionInputValues).call();
+                            const response = await contract.methods[selectedFunction](...Object.values(functionInputValues)).call();
                             const endTime = performance.now();
                             const latency = (endTime - startTime) / 1000;
                             console.log(response);
@@ -399,7 +414,7 @@ function TextArea() {
                                 ftn: selectedFunction,
                                 value: latency,
                                 fee: 0,
-                                tx: 0
+                                tx: 1
                             }
                             console.log(params);
                             const resp = await axios.get('http://10.1.33.124:8000/write-to-user-metric-csv', { params });
@@ -412,7 +427,7 @@ function TextArea() {
                     else {
                         console.log('At latnecy else');
                         // const data = contract.methods[selectedFunction](...functionInputValues).encodeABI();
-                        const gas = await contract.methods[selectedFunction](...functionInputValues).estimateGas();
+                        const gas = await contract.methods[selectedFunction](...Object.values(functionInputValues)).estimateGas();
                         console.log('Gas', gas);
                         const transactionObject = {
                             from: selectedAccount,
@@ -423,7 +438,7 @@ function TextArea() {
                             const startTime = performance.now();
                             // console.log(contract);
                             // console.log(selectedAccount);
-                            const receipt = await contract.methods[selectedFunction](...functionInputValues).send(transactionObject);
+                            const receipt = await contract.methods[selectedFunction](...Object.values(functionInputValues)).send(transactionObject);
                             const endTime = performance.now();
                             const latency = (endTime - startTime) / 1000;
                             console.log(receipt);
@@ -440,10 +455,10 @@ function TextArea() {
                                 ftn: selectedFunction,
                                 value: latency,
                                 fee: txFee,
-                                tx: 0
+                                tx: 1
                             }
                             console.log(params);
-                            const resp = await axios.get('http://10.1.33.124:8000/write-to-user-metric-csv', { params });
+                            const resp = await axios.get('http://' + ServerIP + ':8000/write-to-user-metric-csv', { params });
                             console.log(resp.data);
                             dispatch(setChange(true));
                         }
@@ -456,13 +471,13 @@ function TextArea() {
                     console.log('Input Batch: ', selectedBatch);
                     const promises = [];
                     const nonce = await web3.eth.getTransactionCount(selectedAccount);
-                    const gas = await contract.methods[selectedFunction](...functionInputValues).estimateGas();
+                    const gas = await contract.methods[selectedFunction](...Object.values(functionInputValues)).estimateGas();
                     for (let i = 0; i < Number(selectedBatch); i++) {
                         if (ftn[0].stateMutability === 'pure' || ftn[0].stateMutability === 'view') {
                             console.log('AT if TPS');
                             promises.push(new Promise(async (resolve, reject) => {
                                 try {
-                                    const response = await contract.methods[selectedFunction](...functionInputValues).call();
+                                    const response = await contract.methods[selectedFunction](...Object.values(functionInputValues)).call();
                                     // console.log('TPS response: ', response);
                                     resolve(response);
                                 } catch (error) {
@@ -479,7 +494,7 @@ function TextArea() {
                             };
                             promises.push(new Promise(async (resolve, reject) => {
                                 try {
-                                    const receipt = await contract.methods[selectedFunction](...functionInputValues).send(transactionObject);
+                                    const receipt = await contract.methods[selectedFunction](...Object.values(functionInputValues)).send(transactionObject);
                                     // console.log('TPS response: ', response);
                                     resolve(receipt);
                                 } catch (error) {
@@ -515,7 +530,7 @@ function TextArea() {
                                 tx: selectedBatch
                             }
                             console.log(params);
-                            const resp = await axios.get('http://10.1.33.124:8000/write-to-user-metric-csv', { params });
+                            const resp = await axios.get('http://' + ServerIP + ':8000/write-to-user-metric-csv', { params });
                             console.log(resp.data);
                             dispatch(setChange(true));
                             // resolve({ throughput, receipts });
@@ -569,8 +584,8 @@ function TextArea() {
                                 key={index}
                                 type={input.type}
                                 placeholder={input.name}
-                                value={functionInputValues[index] || ''}
-                                onChange={(event) => handlefunctionInputChange(event, index)}
+                                value={functionInputValues[`${input.type}_${input.name}`]}//{functionInputValues[index] || ''}
+                                onChange={(event) => handlefunctionInputChange(event, input.type, input.name)}
                             />
                         ))}
                 </>
@@ -650,10 +665,11 @@ function TextArea() {
             <label>Select a Blockchain: </label>
             <select value={selectedBlockchain} onChange={handleBlockchainChange}>
                 <option value="">Select blockchain</option>
-                <option value="Arbitum-Goerli">Arbitum</option>
-                <option value="Celo">Alfajores</option>
-                <option value="Linea-Goerli">Linea</option>
-                <option value="Optimism-Goerli">Optimism</option>
+                <option value="Arbitrum-Sepolia">Arbitrum (Sepolia)</option>
+                <option value="Alfajores">Alfajores</option>
+                <option value="Linea-Goerli">Linea (Goerli)</option>
+                <option value="Optimism-Goerli">Optimism (Goerli)</option>
+                <option value="Optimism-Sepolia">Optimism (Sepolia)</option>
                 <option value="Polygon-Mumbai">Mumbai</option>
                 <option value="Sepolia">Sepolia</option>
                 <option value="All">All</option>

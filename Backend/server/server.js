@@ -65,11 +65,11 @@ async function requestHandler(metric, network, API, address, transactions, funct
 function getLatestData(address, callback) {
     console.log(address);
     address = address.toLowerCase();
-    let filePath = `/home/user/Documents/Kachra/React/Lesson 1/server/user_metrics/${address}.csv`;
+    let filePath = `./user_metrics/${address}.csv`;
     fs.access(filePath, fs.constants.F_OK, (err) => {
         if (err) {
             console.log(`File at path '${filePath}' does not exist.`);
-            callback(null);  // Notify that there's no data
+            callback(false);  // Notify that there's no data
         } else {
             console.log(`File at path '${filePath}' exists.`);
             fs.readFile(filePath, 'utf-8', (readErr, data) => {
@@ -109,7 +109,7 @@ app.get('/send-user-metric-csv', async (req, res) => {
         const defaultAccount = '0x5719D02a5ebe5cA3AE722c703c24Ae5C845d0538';
         const { account } = req.query;
         const address = (account ? account : defaultAccount).toLowerCase();
-        const filePath = `/home/user/Documents/Kachra/React/Lesson 1/server/user_metrics/${address}.csv`
+        const filePath = `./user_metrics/${address}.csv`
         const fileContent = fs.readFileSync(filePath, 'utf-8');
         res.setHeader('Content-Type', 'text/csv');
         res.setHeader('Content-Disposition', 'attachment; filename=downloaded-file.csv');
@@ -143,7 +143,7 @@ app.get('/measure-function-call-metrics', async (req, res) => {
     // Execute your Node.js script here
     console.log('At Measure Function Call Metrics');
     const { network, API, ABI, address, metric, ftn, ftnInputs, type, transactions } = req.query;
-    // console.log(network, API, ABI, address, metric, ftn, ftnInputs, type, transactions);
+    console.log(network, API, ABI, address, metric, ftn, ftnInputs, type, transactions);
     const result = await measureMetrics(network, API, ABI, address, metric, ftn, ftnInputs, type, transactions);
     let txFee = 0;
     if ((type != 'pure' && type != 'view') && metric == 'Throughput') {
@@ -152,8 +152,8 @@ app.get('/measure-function-call-metrics', async (req, res) => {
             txFee += Number(result.fee[i].effectiveGasPrice) * Number(result.fee[i].gasUsed);
         }
         txFee = (txFee / transactions) / 1e18;
+        result.fee = txFee;
     }
-    result.fee = txFee;
     console.log(result);
     res.json({ result });
 });

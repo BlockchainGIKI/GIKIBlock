@@ -403,12 +403,12 @@ function writeToFile(_perfMetric, _fee, network, selectedFunction, numTransactio
     const date = new Date();
     switch (metric) {
         case 'Latency':
-            filePath = "/home/user/Documents/Kachra/React/Lesson 1/latency.csv";
+            filePath = "../latency.csv";
             headers_latency = ['Sr No.', 'Date', 'Time', 'Blockchain', 'Function', 'Latency', 'Transaction Fee'];
             csvData = ['1', date.toLocaleDateString(), date.toTimeString(), network, selectedFunction, _perfMetric, _fee, '\n'];
             break;
         case 'Throughput':
-            filePath = "/home/user/Documents/Kachra/React/Lesson 1/throughput.csv";
+            filePath = "../throughput.csv";
             headers_latency = ['Sr No.', 'Date', 'Time', 'Blockchain', 'Function', 'Number of Transactions', 'Throughput', 'Transaction Fee'];
             csvData = ['1', date.toLocaleDateString(), date.toTimeString(), network, selectedFunction, numTransactions, _perfMetric, _fee, '\n'];
             break;

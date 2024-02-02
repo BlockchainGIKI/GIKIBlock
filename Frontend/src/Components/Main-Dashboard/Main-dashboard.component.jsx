@@ -7,6 +7,7 @@ import { setChange } from "../../changeSlice";
 import abi from './Contract';
 import config from './constants';
 import Web3 from "web3";
+import ServerIP from '../../ServerIP';
 
 const MainDashboard = () => {
     const dispatch = useDispatch();
@@ -168,7 +169,11 @@ const MainDashboard = () => {
                                 };
                                 promises.push(new Promise(async (resolve, reject) => {
                                     try {
-                                        const receipt = await contract.methods.createUser('John Doe', 100).send(transactionObject);
+                                        const receipt = await contract.methods.createUser('John Doe', 100).send({
+                                            from: selectedAccount,
+                                            gas,
+                                            gasPrice: '70000000000',
+                                        });
                                         // console.log('TPS response: ', response);
                                         resolve(receipt);
                                     } catch (error) {
@@ -263,7 +268,7 @@ const MainDashboard = () => {
                     metric: metric
                 };
                 console.log(params);
-                const response = await axios.get('http://10.1.33.124:8000/write-to-metrics-csv', { params });
+                const response = await axios.get('http://' + ServerIP + ':8000/write-to-metrics-csv', { params });
                 console.log(response.data);
                 const date = new Date();
                 params = {
@@ -276,12 +281,13 @@ const MainDashboard = () => {
                     ftn: selectedSmartContract,
                     value: perf_metric,
                     fee: transactionFee,
-                    tx: metric === 'Latency' ? 0 : transactions
+                    tx: metric === 'Latency' ? 1 : transactions
                 }
                 console.log(params);
-                const resp = await axios.get('http://10.1.33.124:8000/write-to-user-metric-csv', { params });
+                const resp = await axios.get('http://' + ServerIP + ':8000/write-to-user-metric-csv', { params });
                 console.log(resp.data);
                 dispatch(setChange(true));
+                window.alert(`${metric} measured successfully`)
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -295,12 +301,12 @@ const MainDashboard = () => {
                 status: false,
                 address: '0x'
             }
-            const networks = ['Sepolia', 'Polygon-Mumbai', 'Arbitrum-Goerli', 'Optimism-Goerli', 'Linea-Goerli', 'Celo'];
+            const networks = ['Sepolia', 'Polygon-Mumbai', 'Arbitrum-Sepolia', 'Optimism-Goerli', 'Optimism-Sepolia', 'Linea-Goerli', 'Alfajores'];
             const count = selectedBlockchain === 'All' ? 6 : 1;
             console.log('BC', selectedBlockchain);
             for (let i = 0; i < count; i++) {
                 console.log('Count: ', count);
-                var params = {
+                params = {
                     metric: metric,
                     network: selectedBlockchain !== 'All' ? selectedBlockchain : networks[i],
                     API: api,
@@ -310,7 +316,7 @@ const MainDashboard = () => {
                 };
                 console.log('Params: ', params);
                 try {
-                    const response = await axios.get('http://10.1.33.124:8000/run-node-script', { params });
+                    const response = await axios.get('http://' + ServerIP + ':8000/run-node-script', { params });
                     console.log(response.data);
                     const date = new Date();
                     params = {
@@ -323,12 +329,13 @@ const MainDashboard = () => {
                         ftn: selectedSmartContract,
                         value: response.data.result.perf,
                         fee: response.data.result.txFee,
-                        tx: metric === 'Latency' ? 0 : transactions
+                        tx: metric === 'Latency' ? 1 : transactions
                     }
                     console.log(params);
-                    const resp = await axios.get('http://10.1.33.124:8000/write-to-user-metric-csv', { params });
+                    const resp = await axios.get('http://' + ServerIP + ':8000/write-to-user-metric-csv', { params });
                     console.log(resp.data);
                     dispatch(setChange(true));
+                    window.alert(`${metric} measured successfully`);
                 } catch (error) {
                     console.error('Error fetching data:', error);
                 }
@@ -341,10 +348,11 @@ const MainDashboard = () => {
             <label>Select a Blockchain: </label>
             <select value={selectedBlockchain} onChange={handleBlockchainChange}>
                 <option value="">Select blockchain</option>
-                <option value="Arbitum-Goerli">Arbitum</option>
-                <option value="Celo">Alfajores</option>
-                <option value="Linea-Goerli">Linea</option>
-                <option value="Optimism-Goerli">Optimism</option>
+                <option value="Arbitrum-Sepolia">Arbitrum (Sepolia)</option>
+                <option value="Alfajores">Alfajores</option>
+                <option value="Linea-Goerli">Linea (Goerli)</option>
+                <option value="Optimism-Goerli">Optimism (Goerli)</option>
+                <option value="Optimism-Sepolia">Optimism (Sepolia)</option>
                 <option value="Polygon-Mumbai">Mumbai</option>
                 <option value="Sepolia">Sepolia</option>
                 <option value="All">All</option>
@@ -382,7 +390,7 @@ const MainDashboard = () => {
                     </select><br></br><br></br>
                 </div>
             )}
-            <label>Default smart contracts: </label>
+            <label>Default workload (smart contract) functions: </label>
             <select value={selectedSmartContract} onChange={handleContractChange}>
                 <option value="">Select function</option>
                 <option value="createUser">Create User</option>
