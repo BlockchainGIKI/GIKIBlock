@@ -1,15 +1,17 @@
+const path = require('path');
+require('dotenv').config();
 const { Web3, net } = require('web3');
 const { performance } = require('perf_hooks');
 const fs = require('fs');
 const { abi } = require('../Contract')
-const { config } = require('../constants');
-require('dotenv').config();
+const { config, defaultAddress } = require('../constants');
+
 
 // Default Ethereum node URL
-let privateKey = '0xd25190a68016a74d836189a3ef41b32b405efa9ec0271f429f99dc84e5a7d18d'; // process.env.PRIVATE_KEY;
+let privateKey = process.env.PRIVATE_KEY;
 let providerUrl = '';
 let ContractAddress = '';
-let address1 = '0x5719D02a5ebe5cA3AE722c703c24Ae5C845d0538';
+let address1 = defaultAddress;
 const transactionObject = {
     from: address1,
     gas: 70000,
@@ -28,7 +30,7 @@ function setWeb3(network, API, address) {
         address1 = address.address;
     }
     else {
-        address1 = '0x5719D02a5ebe5cA3AE722c703c24Ae5C845d0538';
+        address1 = defaultAddress;
     }
     console.log(address1);
     console.log(ContractAddress);
@@ -82,12 +84,6 @@ async function measureThroughput(network, API, address, transactions, function_n
             for (let i = 0; i < numTransactions; i++) {
                 // nonce = await web3.eth.getTransactionCount(address1);
                 // console.log(Number(nonce) + i);
-                if (network == 'Linea-Goerli' && i == 25) {
-                    address1 = '0x1D5359780ee3B0a70C535f1afCc4548F3955A6dA'
-                    privateKey = '0xeec1e9e11b8265b7963d26f9eb27e6c4a470ea035e388e8ae7e98003a1925362'
-                    nonce = await web3.eth.getTransactionCount(address1);
-                    count = 0;
-                }
                 const signedTx = await web3.eth.accounts.signTransaction({
                     to: ContractAddress,
                     data: data,

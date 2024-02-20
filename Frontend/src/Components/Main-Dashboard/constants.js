@@ -51,10 +51,10 @@ export const config = {
     },
     'Fuji':
     {
-        'ContractAddress': '',
+        'ContractAddress': '0x6da203ec5e67d3be693fcbdd53bd40a48abc1932',
         'RPC': 'https://avalanche-fuji.infura.io/v3/35aa98e9db6143368a7320d59f937c31'
     }
 
 }
 
-export default config;
+export const defaultAddress = '0xcfC7B78cFC88b3817a23C6b9B6f4eCDD497836B4';

@@ -1,0 +1,3 @@
+Sr No.,Date,Time,Network,Contract Name,Metric,Function,Value,Fee,Transactions
+1,2/20/2024,13:53:14 GMT+0500 (Pakistan Standard Time),Alfajores,Benchmark,Latency,createUser,42.40417947200034,0.00762992,1
+2,2/20/2024,13:53:50 GMT+0500 (Pakistan Standard Time),Fuji,Benchmark,Latency,createUser,6.3660349810002375,0.00909656,1

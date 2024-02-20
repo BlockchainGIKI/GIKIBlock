@@ -5,9 +5,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectAccount } from "../../accountSlice";
 import { setChange } from "../../changeSlice";
 import abi from './Contract';
-import config from './constants';
 import Web3 from "web3";
 import ServerIP from '../../ServerIP';
+import { config, defaultAddress } from './constants';
 
 const MainDashboard = () => {
     const dispatch = useDispatch();
@@ -301,8 +301,8 @@ const MainDashboard = () => {
                 status: false,
                 address: '0x'
             }
-            const networks = ['Sepolia', 'Polygon-Mumbai', 'Arbitrum-Sepolia', 'Optimism-Goerli', 'Optimism-Sepolia', 'Linea-Goerli', 'Alfajores'];
-            const count = selectedBlockchain === 'All' ? 6 : 1;
+            const networks = ['Sepolia', 'Polygon-Mumbai', 'Arbitrum-Sepolia', 'Optimism-Sepolia', 'Linea-Goerli', 'Alfajores', 'Fuji'];
+            const count = selectedBlockchain === 'All' ? 7 : 1;
             console.log('BC', selectedBlockchain);
             for (let i = 0; i < count; i++) {
                 console.log('Count: ', count);
@@ -320,7 +320,7 @@ const MainDashboard = () => {
                     console.log(response.data);
                     const date = new Date();
                     params = {
-                        address: '0x5719D02a5ebe5cA3AE722c703c24Ae5C845d0538',
+                        address: defaultAddress,
                         date: date.toLocaleDateString(),
                         time: date.toTimeString(),
                         network: selectedBlockchain !== 'All' ? selectedBlockchain : networks[i],
@@ -350,8 +350,8 @@ const MainDashboard = () => {
                 <option value="">Select blockchain</option>
                 <option value="Arbitrum-Sepolia">Arbitrum (Sepolia)</option>
                 <option value="Alfajores">Alfajores</option>
+                <option value="Fuji">Fuji (Avalanche)</option>
                 <option value="Linea-Goerli">Linea (Goerli)</option>
-                <option value="Optimism-Goerli">Optimism (Goerli)</option>
                 <option value="Optimism-Sepolia">Optimism (Sepolia)</option>
                 <option value="Polygon-Mumbai">Mumbai</option>
                 <option value="Sepolia">Sepolia</option>

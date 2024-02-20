@@ -7,6 +7,7 @@ import { selectAccount } from "../../accountSlice";
 import { selectChange } from "../../changeSlice";
 import { setChange } from "../../changeSlice";
 import ServerIP from '../../ServerIP';
+import { defaultAddress } from "../Main-Dashboard/constants";
 
 const DynamicTable = () => {
     // get table column
@@ -92,7 +93,7 @@ const DynamicTable = () => {
 
     return (
         <div className="card-Dynamic">
-            <h4> Performance Metric Table for {account ? account : '0x5719D02a5ebe5cA3AE722c703c24Ae5C845d0538'} </h4>
+            <h4> Performance Metric Table for {account ? account : defaultAddress} </h4>
             <table>
                 <thead>
                     <tr>{ThData()}</tr>

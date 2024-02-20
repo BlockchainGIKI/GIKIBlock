@@ -1784,3 +1784,5 @@ Sr No.,Date,Time,Blockchain,Function,Latency,Transaction Fee
 1774,1/30/2024,17:22:13 GMT+0500 (Pakistan Standard Time),Optimism-Sepolia,createUser,11.864582612998783,0.00772856,
 1775,1/30/2024,17:54:58 GMT+0500 (Pakistan Standard Time),Optimism-Sepolia,getUser,1.4575038129985332,0,
 1776,1/30/2024,18:00:52 GMT+0500 (Pakistan Standard Time),Optimism-Sepolia,createUser,8.512198680002243,0.00772856,
+1777,2/20/2024,13:53:14 GMT+0500 (Pakistan Standard Time),Alfajores,createUser,42.40417947200034,0.00762992,
+1778,2/20/2024,13:53:50 GMT+0500 (Pakistan Standard Time),Fuji,createUser,6.3660349810002375,0.00909656,

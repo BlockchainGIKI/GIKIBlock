@@ -3,6 +3,7 @@ const cors = require('cors');
 const fs = require('fs');
 const { measureThroughput, measureLatency, writeToFile, measureMetrics, deployContract } = require('./analysis');
 const { compileAndDeploy, writeToContractCSV, writeToUserMetricsCSV } = require('./compile_deploy');
+const { defaultAddress } = require('../constants');
 
 const app = express();
 app.use(express.json());
@@ -106,9 +107,8 @@ function getLatestData(address, callback) {
 // }); deployContract(network, API, ABI, ByteCode, inputValues) 
 app.get('/send-user-metric-csv', async (req, res) => {
     try {
-        const defaultAccount = '0x5719D02a5ebe5cA3AE722c703c24Ae5C845d0538';
         const { account } = req.query;
-        const address = (account ? account : defaultAccount).toLowerCase();
+        const address = (account ? account : defaultAddress).toLowerCase();
         const filePath = `./user_metrics/${address}.csv`
         const fileContent = fs.readFileSync(filePath, 'utf-8');
         res.setHeader('Content-Type', 'text/csv');
@@ -186,9 +186,8 @@ app.get('/compile-and-deploy', async (req, res) => {
 });
 app.get('/get-latency-data', (req, res) => {
     // Execute your Node.js script here
-    const defaultAccount = '0x5719D02a5ebe5cA3AE722c703c24Ae5C845d0538';
     const { account } = req.query;
-    getLatestData(account ? account : defaultAccount, result => {
+    getLatestData(account ? account : defaultAddress, result => {
         // console.log(result);
         res.json(result);
     });
