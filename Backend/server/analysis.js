@@ -161,11 +161,13 @@ async function measureLatency(network, API, address, function_name) {
             return;
         }
         console.log('After switch statement');
+        const gasPrice = await web3.eth.getGasPrice();
         web3.eth.accounts.signTransaction({
             to: ContractAddress,
             data: data,
             gas: 130000,
-            gasPrice: '80000000000',
+            // gasPrice: '80000000000',
+            gasPrice: gasPrice,
             nonce: await web3.eth.getTransactionCount(address1),
         }, privateKey)
             .then((signedTx) => {
